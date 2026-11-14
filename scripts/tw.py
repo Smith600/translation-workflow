@@ -20,7 +20,7 @@ author_zh = ""
 source_lang = "希腊文"
 profile = "protestant-cuv"
 benchmark_chapters = []
-license = "CC0 1.0（公有领域贡献）"
+license = "CC BY-SA 4.0"   # 若底本为纯公有领域（无 CC 许可的数字本），可改为 "CC0 1.0（公有领域贡献）"
 
 [source]
 edition = ""

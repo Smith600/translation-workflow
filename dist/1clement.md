@@ -7,7 +7,7 @@
 - 底本：Kirsopp Lake, The Apostolic Fathers, vol. 1, Loeb Classical Library, 1912（希腊文）；数字文本取自 J. Tauber & S. Macdonald, Open Apostolic Fathers (2019, CC BY-SA 4.0, DOI 10.5281/zenodo.2555673)（Lake 1912 印刷本为公有领域；Tauber 数字本按 CC BY-SA 4.0 署名使用）https://github.com/jtauber/apostolic-fathers
 - 本译文由 AI 辅助从希腊文原文译出：两个不同的模型（claude-opus-5-5-medium、swe-2-high）各自独立初译，第三个模型（gpt-5-5-medium）对照原文裁决合稿，再经中文润色、自动检查和人工通读。
 - 译者不是古典语言或神学专业人士。译文仅供学习交流，难免有错，欢迎指正；引用或研究请核对原文。
-- 授权：CC0 1.0（公有领域贡献）
+- 授权：CC BY-SA 4.0
 
 ## 第 5 章（未经人工审阅）
 

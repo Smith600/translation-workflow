@@ -3,7 +3,7 @@ title_original = "ΚΛΗΜΕΝΤΟΣ ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Α (1 Clement
 author_zh = "罗马教会致哥林多教会书（传统上归于罗马的克莱门，约主后 96 年）"
 source_lang = "希腊文"
 profile = "protestant-cuv"
-license = "CC0 1.0（公有领域贡献）"
+license = "CC BY-SA 4.0"
 
 # 基准集：覆盖不同文体，用于比较方案（tw.py eval ... --ch bench）
 # 5 使徒殉道叙述 / 16 大段引用以赛亚书 53 章 / 20 宇宙秩序的修辞 / 25 凤凰的比喻
