@@ -10,4 +10,5 @@
 - 术语表只有 `status=locked` 的条目会进入提示词；不要替用户把条目改为 locked。
 - 原始资料在 `apostolic_fathers/`（PDF 不进 git）。注意：`english_ccel/` 的 PDF 实为希腊文；`open_apostolic_fathers/LICENSE` 下载失败（内容为 404）。
 - 模型耗时参考（第 5 章，约 820 个希腊字符）：初译 20–40 秒，裁决约 40 秒，评审 10–40 秒。devin / gemini-4-carbon-medium 每次约 6 分钟，已改用 low 档（约 15 秒）。
+- 流程设计和译文问题的讨论记录在 `docs/discussions/`，约定见其中的 README.md（一话题一文件、只追加、署名 agent / 模型、每节一次提交）。改代码时在提交说明里写“依据讨论 NNN”。
 - 日志与报告中标注模型时一律带上 agent（如 `devin / swe-2-high`、`pi[aliyun-token-plan] / qwen3.8-max`），因为同名模型可能在两个 agent 下都有。
