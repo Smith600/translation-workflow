@@ -1,0 +1,6 @@
+.cache/
+.DS_Store
+__pycache__/
+apostolic_fathers/**/*.pdf
+.obsidian/
+.devin/config.local.json

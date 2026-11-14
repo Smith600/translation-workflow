@@ -1,0 +1,65 @@
+{
+  "method": "pairwise",
+  "a": "draft_a",
+  "b": "draft_b",
+  "judge": "judge_1",
+  "model": "devin / gemini-4-carbon-low",
+  "summary": {
+    "compared": 7,
+    "identical": 0,
+    "fidelity": {
+      "draft_a": 0,
+      "draft_b": 6,
+      "tie": 1
+    },
+    "readability": {
+      "draft_a": 2,
+      "draft_b": 4,
+      "tie": 1
+    }
+  },
+  "items": [
+    {
+      "seg": "5.1",
+      "reason": "译文2完整译出了分词「γενομένους」，且后半句「选取……榜样」比译文1的「拿……来看」更自然得体。",
+      "fidelity": "draft_b",
+      "readability": "draft_b"
+    },
+    {
+      "seg": "5.2",
+      "reason": "两份译文在语义忠实度上无实质差别，译文1「受了迫害，奋斗至死」行文更凝练流畅。",
+      "fidelity": "tie",
+      "readability": "draft_a"
+    },
+    {
+      "seg": "5.3",
+      "reason": "译文2准确译出了「ἡμῶν」（自己/我们），但译文1省去「们」和冗余代词后在中文语感上更自然。",
+      "fidelity": "draft_b",
+      "readability": "draft_a"
+    },
+    {
+      "seg": "5.4",
+      "reason": "译文2以「有彼得」承接上句的宾格结构更贴切，且未像译文1那样额外增译原文没有的「为他预备」，句式也更顺畅。",
+      "fidelity": "draft_b",
+      "readability": "draft_b"
+    },
+    {
+      "seg": "5.5",
+      "reason": "原文此处以逗号引出下文的伴随分词结构，译文2用冒号更能体现句法衔接，单句可读性两者相当。",
+      "fidelity": "draft_b",
+      "readability": "tie"
+    },
+    {
+      "seg": "5.6",
+      "reason": "译文1增译了原文没有的「所配得的」，译文2更忠实准确，且「身负锁链」「赢得尊贵的名声」表达更典雅自然。",
+      "fidelity": "draft_b",
+      "readability": "draft_b"
+    },
+    {
+      "seg": "5.7",
+      "reason": "译文2以「脱离了这个世界」对应「ἀπηλλάγη τοῦ κόσμου」比「离开」更传神，「忍耐最伟大的楷模」也更通顺有力。",
+      "fidelity": "draft_b",
+      "readability": "draft_b"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+title_zh = "克莱门一书"
+title_original = "ΚΛΗΜΕΝΤΟΣ ΠΡΟΣ ΚΟΡΙΝΘΙΟΥΣ Α (1 Clement)"
+author_zh = "罗马教会致哥林多教会书（传统上归于罗马的克莱门，约主后 96 年）"
+source_lang = "希腊文"
+profile = "protestant-cuv"
+license = "CC0 1.0（公有领域贡献）"
+
+# 基准集：覆盖不同文体，用于比较方案（tw.py eval ... --ch bench）
+# 5 使徒殉道叙述 / 16 大段引用以赛亚书 53 章 / 20 宇宙秩序的修辞 / 25 凤凰的比喻
+# 32 因信称义 / 42、44 使徒设立监督与执事 / 60 长篇祷文
+benchmark_chapters = [5, 16, 20, 25, 32, 42, 44, 60]
+
+[chapter_titles]
+0 = "卷首问安"
+66 = "卷末题署"
+
+[source]
+edition = "Kirsopp Lake, The Apostolic Fathers, vol. 1, Loeb Classical Library, 1912（希腊文）；数字文本取自 J. Tauber & S. Macdonald, Open Apostolic Fathers (2019, CC BY-SA 4.0, DOI 10.5281/zenodo.2555673)"
+url = "https://github.com/jtauber/apostolic-fathers"
+copyright = "Lake 1912 印刷本为公有领域；Tauber 数字本按 CC BY-SA 4.0 署名使用"
+local_copy = "apostolic_fathers/open_apostolic_fathers/001-i_clement.txt"
+import_command = "python3 scripts/import_segmented.py apostolic_fathers/open_apostolic_fathers/001-i_clement.txt books/1clement --extra SB=66"
+notes = "59.3 开头的省略号为 Lake 本原有（原文在此处转入祷文）。异文对照见 Lightfoot–Harmer 1891 与 Gebhardt–Harnack–Zahn 1906（apostolic_fathers/ 目录）。"
+
+[references.en-lake1912]
+description = "Lake 1912 英译，由 OCR 自动抽取，仅作审校旁证"
+import_command = "python3 scripts/import_lake_en.py apostolic_fathers/loeb_lake_v1/Lake_Vol1_GR-EN.txt books/1clement"

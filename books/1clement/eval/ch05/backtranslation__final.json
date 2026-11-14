@@ -1,0 +1,32 @@
+{
+  "method": "backtranslation",
+  "version": "final",
+  "judge": "judge_1",
+  "summary": {
+    "deviations": 3,
+    "per_1000": 11.5,
+    "by_severity": {
+      "minor": 3
+    }
+  },
+  "items": [
+    {
+      "seg": "5.1",
+      "severity": "minor",
+      "kind": "误译",
+      "explanation": "原文 ἔλθωμεν ἐπὶ... 意为“让我们来到/转向（离我们最近的竞技者们）”，而回译作 let us look at（让我们看看），将表示话题转换的“来到/转向”译成了“看”。"
+    },
+    {
+      "seg": "5.4",
+      "severity": "minor",
+      "kind": "误译",
+      "explanation": "原文 οὐχ ἕνα οὐδὲ δύο, ἀλλὰ πλείονας ὑπήνεγκεν πόνους 意为“忍受了不是一种也不是两种，而是许多种苦难/劳苦（πόνους 为复数名词，数词修饰名词）”，回译作 suffered not once, not twice, but many times（受苦不止一次、两次，而是多次），将苦难的“数量/种类”变成了受苦的“次数”，漏掉了名词 πόνους（苦难/辛劳）的具体含义。"
+    },
+    {
+      "seg": "5.6",
+      "severity": "minor",
+      "kind": "误译",
+      "explanation": "原文 φυγαδευθείς, λιθασθείς 的先后顺序是“被流放/驱逐，被石头打”，回译作 was stoned, was driven out（被石头打，被赶出去），两件事的先后顺序颠倒了。"
+    }
+  ]
+}

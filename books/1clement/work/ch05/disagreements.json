@@ -1,0 +1,57 @@
+[
+  {
+    "seg": "5.1",
+    "source_phrase": "ἔγγιστα γενομένους ἀθλητάς",
+    "a": "离我们最近的那些斗士",
+    "b": "离我们最近、刚刚出现过的那些争战者",
+    "reference": "those who contended in the days nearest to us",
+    "decision": "a",
+    "reason": "原文的意思是“在时间上离我们最近的那些竞技者/斗士”。γενομένους 表示“曾经出现、发生、成为”，配合 ἔγγιστα 强调时代接近；译成“刚刚出现过”容易让人以为是刚发生不久，语气比原文更窄。",
+    "confidence": "high",
+    "suggested_note": ""
+  },
+  {
+    "seg": "5.4",
+    "source_phrase": "εἰς τὸν ὀφειλόμενον τόπον τῆς δόξης",
+    "a": "往那为他预备、他当得的荣耀之地去了",
+    "b": "就前往他当得的荣耀之地",
+    "reference": "went to the glorious place which was his due",
+    "decision": "b",
+    "reason": "ὀφειλόμενον 的意思是“应得的、当得的、所归属的”。原文没有“为他预备”的意思；甲这样译读起来顺，但增添了原文没有明说的内容。因此保留“他当得的荣耀之地”即可。",
+    "confidence": "high",
+    "suggested_note": ""
+  },
+  {
+    "seg": "5.6",
+    "source_phrase": "κήρυξ γενόμενος ἔν τε τῇ ἀνατολῇ καὶ ἐν τῇ δύσει",
+    "a": "在东方和西方都作了传道的人",
+    "b": "又在东方和西方作了传报的使者",
+    "reference": "he was a herald both in the East and in the West",
+    "decision": "merged",
+    "reason": "κήρυξ 本义是“宣告者、传令者”。在保罗的语境中自然指宣讲福音的人，但原词不只是一般意义的“使者”。“传道的人”意思清楚但略解释化，“传报的使者”较贴近本义但中文稍不自然；合成译为“宣讲者”，既保留宣告的意思，也符合上下文。",
+    "confidence": "high",
+    "suggested_note": ""
+  },
+  {
+    "seg": "5.6",
+    "source_phrase": "ἑπτάκις δεσμὰ φορέσας, φυγαδευθείς, λιθασθείς, κήρυξ γενόμενος ... τὸ γενναῖον τῆς πίστεως αὐτοῦ κλέος ἔλαβεν",
+    "a": "他七次戴上锁链，被放逐，被石头打，在东方和西方都作了传道的人，因此得着了他信心所配得的高贵名声",
+    "b": "他曾七次身负锁链，曾被放逐，曾被石头击打，又在东方和西方作了传报的使者，为自己的信心赢得了尊贵的名声",
+    "reference": "seven times he was in bonds, he was exiled, he was stoned, he was a herald both in the East and in the West, he gained the noble fame of his faith",
+    "decision": "b",
+    "reason": "原文是一连串分词之后接主要动词“得着了名声”，没有明说“因此”。这些经历确实构成保罗得着名声的背景，但译文若加“因此”，会把关系说得比原文更明确。乙没有加因果词，较稳妥。不过“为自己的信心赢得”也略有解释性，所以正文译作“得着了他信心的高贵名声”。",
+    "confidence": "medium",
+    "suggested_note": ""
+  },
+  {
+    "seg": "5.7",
+    "source_phrase": "ἀπηλλάγη τοῦ κόσμου",
+    "a": "离开了世界",
+    "b": "脱离了这个世界",
+    "reference": "passed from the world",
+    "decision": "b",
+    "reason": "ἀπηλλάγη 不只是中性的“离开”，有“被释放、脱离”的意思。这里说保罗作完见证后从世界被释放出来，乙的“脱离了这个世界”比甲更能表达原词的意味。",
+    "confidence": "high",
+    "suggested_note": ""
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "method": "calibration",
+  "version": "final",
+  "summary": {
+    "seeded": 3,
+    "recall": {
+      "judge_1": 1.0,
+      "judge_2": 1.0
+    }
+  },
+  "judges": {
+    "judge_1": {
+      "model": "devin / gemini-4-carbon-low",
+      "detected": [
+        "5.2",
+        "5.6",
+        "5.7"
+      ],
+      "recall": 1.0
+    },
+    "judge_2": {
+      "model": "pi[aliyun-token-plan] / qwen3.8-max",
+      "detected": [
+        "5.2",
+        "5.6",
+        "5.7"
+      ],
+      "recall": 1.0
+    }
+  },
+  "items": [
+    {
+      "seg": "5.2",
+      "type": "negation",
+      "new_text": "[5.2] 因为嫉妒和忌恨，那些最伟大、最公义的柱石没有遭受逼迫，仍奋斗直到死。",
+      "description": "原文 ἐδιώχθησαν（被逼迫/被追杀）是肯定句，译文加入「没有」将肯定改为否定，与原文意思相反。"
+    },
+    {
+      "seg": "5.6",
+      "type": "omission",
+      "new_text": "[5.6] 他七次身负锁链，被石头击打，在东方和西方作了宣讲者，得着了他信心的高贵名声；",
+      "description": "原文有 φυγαδευθείς（被放逐）一项，译文漏掉了「被放逐」，使保罗所受的苦难少了一项。"
+    },
+    {
+      "seg": "5.7",
+      "type": "mistranslation",
+      "new_text": "[5.7] 他向全世界教导公义，又到了东方的尽头，在掌权者面前作了见证；这样，他脱离了世界，被接到圣洁之地，成了忍耐最伟大的楷模。",
+      "description": "原文 τὸ τέρμα τῆς δύσεως 是「西方的尽头」（传统上指西班牙），译文误作「东方的尽头」，方向弄反。"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "method": "mqm",
+  "version": "seeded_final",
+  "judge": "judge_1",
+  "model": "devin / gemini-4-carbon-low",
+  "summary": {
+    "penalty": 55,
+    "chars": 261,
+    "per_1000": 210.7,
+    "by_severity": {
+      "critical": 2,
+      "major": 1
+    },
+    "by_category": {
+      "mistranslation": 2,
+      "omission": 1
+    }
+  },
+  "items": [
+    {
+      "seg": "5.2",
+      "category": "mistranslation",
+      "severity": "critical",
+      "span": "没有遭受逼迫，仍奋斗直到死",
+      "source_phrase": "ἐδιώχθησαν καὶ ἕως θανάτου ἤθλησαν",
+      "explanation": "原文是肯定陈述，意思是“遭受了逼迫，并且奋斗直到死”，没有任何否定词。译文凭空加入了否定词“没有”，并把并列连词译成了转折关系“仍”，使意思与原文及整段劝勉的主旨完全相反。",
+      "suggestion": "遭受了逼迫，并且奋斗直到死"
+    },
+    {
+      "seg": "5.6",
+      "category": "omission",
+      "severity": "major",
+      "span": "他七次身负锁链，被石头击打",
+      "source_phrase": "ἑπτάκις δεσμὰ φορέσας, φυγαδευθείς, λιθασθείς",
+      "explanation": "原文在“身负锁链”与“被石头击打”之间还有一个被动分词，意思是“被放逐”或“被驱逐流亡”，译文漏译了这一项保罗所受的苦难。",
+      "suggestion": "他七次身负锁链，被放逐，被石头击打"
+    },
+    {
+      "seg": "5.7",
+      "category": "mistranslation",
+      "severity": "critical",
+      "span": "东方的尽头",
+      "source_phrase": "τὸ τέρμα τῆς δύσεως",
+      "explanation": "原文中指方位的是“西方”（该词刚在上一节 5.6 中被正确译为“西方”），整句意为“西方的尽头”（早期教会传统中借此指保罗向西远赴罗马乃至西班牙宣教的经历）。译文误译成了相反的“东方”，严重歪曲了作者记述的史实。",
+      "suggestion": "西方的尽头"
+    }
+  ]
+}

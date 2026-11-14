@@ -1,0 +1,13 @@
+{
+  "version": "final",
+  "stats": {
+    "segments": 7,
+    "translated": 7,
+    "completeness": 1.0,
+    "term_checked": 0,
+    "term_compliance": null,
+    "errors": 0,
+    "warnings": 0
+  },
+  "issues": []
+}

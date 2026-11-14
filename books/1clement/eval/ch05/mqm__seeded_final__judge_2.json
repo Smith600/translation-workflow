@@ -1,0 +1,48 @@
+{
+  "method": "mqm",
+  "version": "seeded_final",
+  "judge": "judge_2",
+  "model": "pi[aliyun-token-plan] / qwen3.8-max",
+  "summary": {
+    "penalty": 35,
+    "chars": 261,
+    "per_1000": 134.1,
+    "by_severity": {
+      "critical": 1,
+      "major": 2
+    },
+    "by_category": {
+      "mistranslation": 2,
+      "omission": 1
+    }
+  },
+  "items": [
+    {
+      "seg": "5.2",
+      "category": "mistranslation",
+      "severity": "critical",
+      "span": "没有遭受逼迫",
+      "source_phrase": "ἐδιώχθησαν",
+      "explanation": "ἐδιώχθησαν 是 διώκω 的不定过去时被动语态，意思是\"遭受了逼迫\"。译文中凭空加了一个否定词\"没有\"，把意思完全颠倒了。原文说这些柱石因嫉妒和忌恨而被逼迫，译文却说他们没有遭受逼迫，这与上下文（以他们为受苦榜样）直接矛盾，会让读者对作者的意思产生根本性的误解。",
+      "suggestion": "改为\"遭受了逼迫\"，如：因为嫉妒和忌恨，那些最伟大、最公义的柱石遭受了逼迫，并且奋斗至死。"
+    },
+    {
+      "seg": "5.6",
+      "category": "omission",
+      "severity": "major",
+      "span": "他七次身负锁链，被石头击打，在东方和西方作了宣讲者",
+      "source_phrase": "ἑπτάκις δεσμὰ φορέσας, φυγαδευθείς, λιθασθείς",
+      "explanation": "原文在\"七次身负锁链\"之后还有 φυγαδευθείς（被放逐/被驱逐），然后才是 λιθασθείς（被石头打）。译文漏掉了\"被放逐\"这一项，丢失了原文列举的一项经历。",
+      "suggestion": "改为\"他七次身负锁链，被放逐，被石头击打，在东方和西方作了宣讲者……\""
+    },
+    {
+      "seg": "5.7",
+      "category": "mistranslation",
+      "severity": "major",
+      "span": "又到了东方的尽头",
+      "source_phrase": "ἐπὶ τὸ τέρμα τῆς δύσεως ἐλθὼν",
+      "explanation": "τῆς δύσεως 意为\"西方\"（与上一句 τῇ δύσει 同词），整句意思是\"到了西方的尽头\"。译文误作\"东方的尽头\"，方向完全反了。",
+      "suggestion": "改为\"又到了西方的尽头\"。"
+    }
+  ]
+}

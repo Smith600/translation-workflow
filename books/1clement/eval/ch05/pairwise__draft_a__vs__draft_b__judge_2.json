@@ -1,0 +1,65 @@
+{
+  "method": "pairwise",
+  "a": "draft_a",
+  "b": "draft_b",
+  "judge": "judge_2",
+  "model": "pi[aliyun-token-plan] / qwen3.8-max",
+  "summary": {
+    "compared": 7,
+    "identical": 0,
+    "fidelity": {
+      "draft_a": 1,
+      "draft_b": 3,
+      "tie": 3
+    },
+    "readability": {
+      "draft_a": 0,
+      "draft_b": 4,
+      "tie": 3
+    }
+  },
+  "items": [
+    {
+      "seg": "5.1",
+      "reason": "译文2增补了「刚刚出现过的」，原文ἔγγιστα仅表「最近的」，未强调时间上的「刚刚」，故忠实度译文1略胜；可读性上译文2「让我们放下……选取」结构更流畅。",
+      "fidelity": "draft_a",
+      "readability": "draft_b"
+    },
+    {
+      "seg": "5.2",
+      "reason": "两份译文在词义和句式上几乎无实质差异。",
+      "fidelity": "tie",
+      "readability": "tie"
+    },
+    {
+      "seg": "5.3",
+      "reason": "「我们」与「自己」均对应ἡμῶν，差异极微。",
+      "fidelity": "tie",
+      "readability": "tie"
+    },
+    {
+      "seg": "5.4",
+      "reason": "原文ὃς引导的关系从句以「有彼得，他……」起句更贴合希腊文结构；译文1拆成两句后「他就这样」的主语衔接略显突兀，译文2「他这样作了见证之后，就前往……」逻辑更顺畅。",
+      "fidelity": "draft_b",
+      "readability": "draft_b"
+    },
+    {
+      "seg": "5.5",
+      "reason": "译文1用句号、译文2用冒号引出下文，属标点风格差异，不影响意思。",
+      "fidelity": "tie",
+      "readability": "tie"
+    },
+    {
+      "seg": "5.6",
+      "reason": "译文1将「因此得着了他信心所配得的高贵名声」误植为5.7末尾的内容，且添加了原文没有的「所配得的」；译文2对应本段更为准确，行文也更整齐。",
+      "fidelity": "draft_b",
+      "readability": "draft_b"
+    },
+    {
+      "seg": "5.7",
+      "reason": "译文1把本段开头的「教导公义」挪到了5.6末尾，造成错位；译文2各句对应原文顺序完整，且「最伟大的楷模」比「最大的榜样」更贴合μέγιστος ὑπογραμμός的庄重语感。",
+      "fidelity": "draft_b",
+      "readability": "draft_b"
+    }
+  ]
+}

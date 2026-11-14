@@ -1,0 +1,38 @@
+{
+  "method": "mqm",
+  "version": "final",
+  "judge": "judge_1",
+  "model": "devin / gemini-4-carbon-low",
+  "summary": {
+    "penalty": 2,
+    "chars": 262,
+    "per_1000": 7.6,
+    "by_severity": {
+      "minor": 2
+    },
+    "by_category": {
+      "addition": 1,
+      "register": 1
+    }
+  },
+  "items": [
+    {
+      "seg": "5.4",
+      "category": "addition",
+      "severity": "minor",
+      "span": "他应得的荣耀之地",
+      "source_phrase": "τὸν ὀφειλόμενον τόπον τῆς δόξης",
+      "explanation": "原文修饰“荣耀之地”的只是“应得的”（或“所当归的”），并没有代词“他”。译成“他应得的”属于增译（且容易引发关于功德的神学联想），直接译为“那应得的荣耀之地”更贴合原文。",
+      "suggestion": "那应得的荣耀之地"
+    },
+    {
+      "seg": "5.6",
+      "category": "register",
+      "severity": "minor",
+      "span": "得着了",
+      "source_phrase": "ἔλαβεν",
+      "explanation": "“得着”属于和合本旧式白话用词。按照风格指南“不模仿和合本的旧式白话，使用规范的现代白话文”的要求，此处宜用现代白话“得到了”或“获得了”。",
+      "suggestion": "获得了"
+    }
+  ]
+}

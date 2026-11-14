@@ -1,0 +1,69 @@
+{
+  "method": "qa",
+  "version": "final",
+  "summary": {
+    "questions": 7,
+    "score": 1.0,
+    "correct": 7,
+    "partial": 0,
+    "wrong": 0
+  },
+  "items": [
+    {
+      "seg": "5.1",
+      "question": "作者提出不再举古代的例子后，转而要求读者关注哪一类人？",
+      "expected": "最近时代的竞技者（即作者所在世代的杰出典范）。",
+      "answer": "离我们最近的斗士，从我们这一代中选取高贵的榜样",
+      "grade": "correct",
+      "reason": ""
+    },
+    {
+      "seg": "5.2",
+      "question": "作者认为那些最伟大、最公义的柱石遭受逼迫直至殉道，是由哪两种原因造成的？",
+      "expected": "嫉妒（ζῆλος）和忌恨（φθόνος）。",
+      "answer": "嫉妒和忌恨",
+      "grade": "correct",
+      "reason": ""
+    },
+    {
+      "seg": "5.4",
+      "question": "作者强调彼得所受的苦难并非一两次，而是怎样的数量？",
+      "expected": "不是一次也不是两次，而是许多次（πλείονας）。",
+      "answer": "许多次",
+      "grade": "correct",
+      "reason": ""
+    },
+    {
+      "seg": "5.4",
+      "question": "作者用什么修饰语来形容导致彼得受苦的「嫉妒」？",
+      "expected": "不义的（ἄδικον），即「不义的嫉妒」。",
+      "answer": "不义的",
+      "grade": "correct",
+      "reason": ""
+    },
+    {
+      "seg": "5.6",
+      "question": "作者说保罗被捆缚了多少次？",
+      "expected": "七次（ἑπτάκις）。",
+      "answer": "七次",
+      "grade": "correct",
+      "reason": ""
+    },
+    {
+      "seg": "5.7",
+      "question": "作者说保罗在把公义教导给全世界之后，到达了什么地方？",
+      "expected": "西方的尽头（τὸ τέρμα τῆς δύσεως）。",
+      "answer": "西方的尽头",
+      "grade": "correct",
+      "reason": ""
+    },
+    {
+      "seg": "5.7",
+      "question": "保罗在众人面前作见证之后，被接去了哪里？",
+      "expected": "圣洁的地方（τὸν ἅγιον τόπον）。",
+      "answer": "圣洁之地",
+      "grade": "correct",
+      "reason": ""
+    }
+  ]
+}
