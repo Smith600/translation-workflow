@@ -1,5 +1,4 @@
 import datetime
-import functools
 import hashlib
 import json
 import subprocess
@@ -28,8 +27,8 @@ def isolation_template():
     return text
 
 
-@functools.lru_cache(maxsize=None)
 def devin_version():
+    """每次调用前重新读取：devin 会在后台自动升级，下一次启动即换用新版本。"""
     out = subprocess.run(["devin", "version"], capture_output=True, text=True, timeout=60).stdout.strip()
     return out.split()[1] if out.startswith("devin ") else out
 
