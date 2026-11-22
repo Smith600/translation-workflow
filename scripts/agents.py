@@ -33,6 +33,33 @@ def devin_version():
     return out.split()[1] if out.startswith("devin ") else out
 
 
+class IsolationNotVerified(Exception):
+    """当前 devin 版本 + 隔离配置 + 模型没有通过的隔离验证记录。不属于逐章可容错的失败，必须停止。"""
+
+
+def verified_isolation(model, version, isolation_sha):
+    for p in sorted((CACHE / "isolation").glob("*.json")):
+        try:
+            r = json.loads(p.read_text("utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if (r.get("all_passed") is True and r.get("model") == f"devin / {model}"
+                and r.get("devin_cli_version") == version and r.get("isolation_sha256") == isolation_sha):
+            return p
+    return None
+
+
+def require_isolation(role, version=None):
+    if role["agent"] != "devin":
+        return
+    version = version or devin_version()
+    if not verified_isolation(role["model"], version, sha256(isolation_template())):
+        raise IsolationNotVerified(
+            f"{label(role)} 在 devin CLI {version}、当前隔离配置下没有通过的隔离验证记录"
+            f"（devin 可能已升级，或换了模型）。请先运行：python3 scripts/verify_isolation.py --model {role['model']}"
+            "，全部通过后再重跑同一命令（已完成的章节会跳过）。")
+
+
 def _command(role, prompt_file, prompt, config_file=None):
     if role["agent"] == "devin":
         return ["devin", "--model", role["model"], "--config", str(config_file), "--permission-mode", "auto",

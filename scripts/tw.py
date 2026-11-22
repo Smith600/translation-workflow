@@ -104,6 +104,8 @@ def translate(cfg, book, ch, only="ab", force=False):
     if not todo:
         print(f"  已有初译（{', '.join(f'draft_{x}' for x in only)}），跳过；如需重译请加 --force")
         return
+    for x in todo:
+        agents.require_isolation(cfg["roles"][f"translator_{x}"])
     pending = [r for r in book.glossary(False) if r.get("status") != "locked"]
     if pending:
         print(f"  提醒：术语表（基础表 + 本书表）中有 {len(pending)} 条尚未锁定（status≠locked），本次翻译不会使用它们")
@@ -114,8 +116,11 @@ def translate(cfg, book, ch, only="ab", force=False):
     with ThreadPoolExecutor(len(todo)) as ex:
         futures = {x: ex.submit(agents.call, cfg, f"translator_{x}", prompt, _translation_validator(source), infos[x])
                    for x in todo}
-    for x, fut in futures.items():
-        segs, notes = fut.result()
+    results = {x: fut.result() for x, fut in futures.items()}
+    for x in todo:
+        if not infos[x].get("cache_hit"):
+            agents.require_isolation(cfg["roles"][f"translator_{x}"], infos[x].get("devin_cli_version"))
+    for x, (segs, notes) in results.items():
         segments.save(work / f"draft_{x}.txt", segs)
         (work / f"notes_{x}.md").write_text(notes + "\n", "utf-8")
         write_json(work / f"draft_{x}.meta.json", {
@@ -391,7 +396,10 @@ def main():
     args = p.parse_args()
     if not hasattr(args, "force"):
         args.force = False
-    args.fn(args, load_config())
+    try:
+        args.fn(args, load_config())
+    except agents.IsolationNotVerified as e:
+        sys.exit(f"已停止：{e}")
 
 
 if __name__ == "__main__":

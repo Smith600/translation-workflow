@@ -148,17 +148,96 @@ class FakeBook:
         return "（未标注）"
 
 
+CFG = {"roles": {"translator_a": {"agent": "devin", "model": "m"}, "translator_b": {"agent": "devin", "model": "m"}}}
+
+
 def fake_call(cfg, role, prompt, validate, info):
     ch = prompt.split("第 ")[1].split(" 章")[0]
-    info.update(label=f"devin / {role}", cache_hit=False, blocked_tool_calls=[])
+    info.update(label=f"devin / {role}", cache_hit=False, blocked_tool_calls=[],
+                devin_cli_version=agents.devin_version())
     return validate(f"[{ch}.1] 道\n[{ch}.2] 上帝\n=== NOTES ===\n[{ch}.1] 把握：高｜建议译注：否｜无")
 
 
+class VerifiedEnv:
+    """临时 .cache，并写入一条 devin / m 在 CLI 1.0 下通过的隔离验证记录。"""
+
+    def __init__(self, record=True, all_passed=True):
+        self.record, self.all_passed = record, all_passed
+
+    def __enter__(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        cache = Path(self.tmp.name)
+        if self.record:
+            (cache / "isolation").mkdir()
+            (cache / "isolation" / "r.json").write_text(json.dumps({
+                "model": "devin / m", "devin_cli_version": "1.0", "all_passed": self.all_passed,
+                "isolation_sha256": agents.sha256(agents.isolation_template())}), "utf-8")
+        self.patch = mock.patch.object(agents, "CACHE", cache)
+        self.patch.start()
+        return cache
+
+    def __exit__(self, *exc):
+        self.patch.stop()
+        self.tmp.cleanup()
+
+
+class IsolationGuardTest(unittest.TestCase):
+    def test_verified_record_must_match_everything(self):
+        sha = agents.sha256(agents.isolation_template())
+        with VerifiedEnv():
+            self.assertIsNotNone(agents.verified_isolation("m", "1.0", sha))
+            self.assertIsNone(agents.verified_isolation("m", "1.1", sha))
+            self.assertIsNone(agents.verified_isolation("other", "1.0", sha))
+            self.assertIsNone(agents.verified_isolation("m", "1.0", "x" * 64))
+        with VerifiedEnv(all_passed=False):
+            self.assertIsNone(agents.verified_isolation("m", "1.0", sha))
+        with VerifiedEnv(record=False):
+            self.assertIsNone(agents.verified_isolation("m", "1.0", sha))
+        agents.require_isolation({"agent": "pi", "model": "q"})
+
+    def test_unverified_stops_before_any_model_call(self):
+        with tempfile.TemporaryDirectory() as d, VerifiedEnv(record=False), \
+                mock.patch.object(agents, "devin_version", return_value="1.0"), \
+                mock.patch.object(tw.agents, "call", side_effect=fake_call) as call:
+            with self.assertRaises(agents.IsolationNotVerified):
+                tw.translate(CFG, FakeBook(d), 3, only="a")
+            call.assert_not_called()
+
+    def test_upgrade_mid_batch_stops_whole_batch(self):
+        with tempfile.TemporaryDirectory() as d, VerifiedEnv(), \
+                mock.patch.object(agents, "devin_version", side_effect=["1.0", "1.0", "2.0", "2.0"]), \
+                mock.patch.object(tw.agents, "call", side_effect=fake_call), \
+                mock.patch.object(tw, "Book", return_value=FakeBook(d)) as book_cls:
+            book_cls.return_value.parse_chapters = lambda spec: [1, 2, 3]
+            args = mock.Mock(cmd="translate", book="x", ch="1-3", only="a", force=False)
+            with self.assertRaises(agents.IsolationNotVerified):
+                tw.cmd_stage(args, CFG)
+            self.assertTrue((Path(d) / "ch01" / "draft_a.txt").exists())
+            self.assertFalse((Path(d) / "ch02" / "draft_a.txt").exists())
+            self.assertFalse((Path(d) / "ch03").exists())
+
+    def test_upgrade_during_call_discards_draft(self):
+        with tempfile.TemporaryDirectory() as d, VerifiedEnv(), \
+                mock.patch.object(agents, "devin_version", side_effect=["1.0", "2.0"]), \
+                mock.patch.object(tw.agents, "call", side_effect=fake_call):
+            with self.assertRaises(agents.IsolationNotVerified):
+                tw.translate(CFG, FakeBook(d), 3, only="a")
+            self.assertFalse((Path(d) / "ch03" / "draft_a.txt").exists())
+
+
 class TranslateTest(unittest.TestCase):
+    def setUp(self):
+        self.env = VerifiedEnv()
+        self.env.__enter__()
+        p = mock.patch.object(agents, "devin_version", return_value="1.0")
+        p.start()
+        self.addCleanup(p.stop)
+        self.addCleanup(self.env.__exit__)
+
     def test_only_skip_and_meta(self):
         with tempfile.TemporaryDirectory() as d, mock.patch.object(tw.agents, "call", side_effect=fake_call) as call:
             book = FakeBook(d)
-            tw.translate({}, book, 3, only="a")
+            tw.translate(CFG, book, 3, only="a")
             work = book.work(3)
             self.assertTrue((work / "draft_a.txt").exists())
             self.assertFalse((work / "draft_b.txt").exists())
@@ -166,9 +245,9 @@ class TranslateTest(unittest.TestCase):
             self.assertEqual(meta["translator"], "translator_a")
             for k in ("prompt_template", "prompt_rendered", "source", "style_guide", "glossary", "scripture"):
                 self.assertEqual(len(meta["sha256"][k]), 64)
-            tw.translate({}, book, 3, only="a")
+            tw.translate(CFG, book, 3, only="a")
             self.assertEqual(call.call_count, 1)
-            tw.translate({}, book, 3, only="a", force=True)
+            tw.translate(CFG, book, 3, only="a", force=True)
             self.assertEqual(call.call_count, 2)
 
     def test_chapter_failure_does_not_stop_batch(self):
