@@ -98,22 +98,33 @@ def _translation_validator(source, with_json=None):
     return validate
 
 
-def translate(cfg, book, ch):
-    source = book.source(ch)
+def translate(cfg, book, ch, only="ab", force=False):
+    source, work = book.source(ch), book.work(ch)
+    todo = [x for x in only if force or not ((work / f"draft_{x}.txt").exists() and (work / f"draft_{x}.meta.json").exists())]
+    if not todo:
+        print(f"  已有初译（{', '.join(f'draft_{x}' for x in only)}），跳过；如需重译请加 --force")
+        return
     pending = [r for r in book.glossary(False) if r.get("status") != "locked"]
     if pending:
         print(f"  提醒：术语表（基础表 + 本书表）中有 {len(pending)} 条尚未锁定（status≠locked），本次翻译不会使用它们")
-    prompt = render("translate", source_lang=book.lang, book_title=book.title, chapter=ch,
-                    style_guide=book.style_guide(), glossary=book.glossary_text(),
-                    scripture=book.scripture_text(ch), source=segments.dump(source))
-    with ThreadPoolExecutor(2) as ex:
-        futures = {x: ex.submit(agents.call, cfg, f"translator_{x}", prompt, _translation_validator(source))
-                   for x in "ab"}
+    inputs = {"source": segments.dump(source), "style_guide": book.style_guide(), "glossary": book.glossary_text(),
+              "scripture": book.scripture_text(ch)}
+    prompt = render("translate", source_lang=book.lang, book_title=book.title, chapter=ch, **inputs)
+    infos = {x: {} for x in todo}
+    with ThreadPoolExecutor(len(todo)) as ex:
+        futures = {x: ex.submit(agents.call, cfg, f"translator_{x}", prompt, _translation_validator(source), infos[x])
+                   for x in todo}
     for x, fut in futures.items():
         segs, notes = fut.result()
-        segments.save(book.work(ch) / f"draft_{x}.txt", segs)
-        (book.work(ch) / f"notes_{x}.md").write_text(notes + "\n", "utf-8")
-    print(f"  初译完成：{book.work(ch)}/draft_a.txt, draft_b.txt")
+        segments.save(work / f"draft_{x}.txt", segs)
+        (work / f"notes_{x}.md").write_text(notes + "\n", "utf-8")
+        write_json(work / f"draft_{x}.meta.json", {
+            "translator": f"translator_{x}", "chapter": ch, **infos[x],
+            "sha256": {"prompt_template": agents.sha256((ROOT / "prompts" / "translate.md").read_text("utf-8")),
+                       "prompt_rendered": agents.sha256(prompt), **{k: agents.sha256(v) for k, v in inputs.items()}},
+            "written_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        })
+    print(f"  初译完成：{', '.join(f'{work}/draft_{x}.txt' for x in todo)}")
 
 
 def adjudicate(cfg, book, ch):
@@ -313,11 +324,23 @@ def cmd_eval(args, cfg):
 
 def cmd_stage(args, cfg):
     book = Book(args.book)
+    if args.cmd == "translate":
+        failures = []
+        for ch in book.parse_chapters(args.ch):
+            print(f"第 {ch} 章：translate")
+            try:
+                translate(cfg, book, ch, args.only or "ab", args.force)
+            except (RuntimeError, ValueError) as e:
+                print(f"  第 {ch} 章失败：{e}", file=sys.stderr)
+                failures.append(ch)
+        if failures:
+            sys.exit(f"以下章节初译失败，重跑同一命令即可（已完成的会跳过）：{', '.join(map(str, failures))}")
+        return
     failed = 0
     for ch in book.parse_chapters(args.ch):
         print(f"第 {ch} 章：{args.cmd}")
-        if args.cmd in ("translate", "run"):
-            translate(cfg, book, ch)
+        if args.cmd == "run":
+            translate(cfg, book, ch, force=args.force)
         if args.cmd in ("adjudicate", "run"):
             adjudicate(cfg, book, ch)
         if args.cmd in ("polish", "run"):
@@ -350,7 +373,9 @@ def main():
     add("init", cmd_init, "新建一本书的目录骨架", ch=False)
     add("glossary", cmd_glossary, "译前：抽取术语候选（之后需人工确认锁定）").add_argument("--batch", type=int, default=10)
     add("scripture", cmd_scripture, "译前：标出圣经引用")
-    add("translate", cmd_stage, "阶段 1：两个模型独立初译")
+    tr = add("translate", cmd_stage, "阶段 1：两个模型独立初译（已有初译的章节自动跳过）")
+    tr.add_argument("--only", choices=["a", "b"], help="只运行译者甲（a）或乙（b）")
+    tr.add_argument("--force", action="store_true", help="已有初译也重译")
     add("adjudicate", cmd_stage, "阶段 2：第三个模型对照原文裁决合稿")
     add("polish", cmd_stage, "阶段 3：中文润色 + 忠实度复查").add_argument("--force", action="store_true")
     add("check", cmd_stage, "阶段 4：机械检查").add_argument("--version", default="final")

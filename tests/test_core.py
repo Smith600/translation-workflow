@@ -1,12 +1,17 @@
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
+import agents
 import checks
 import common
 import segments
+import tw
 
 
 class SegmentsTest(unittest.TestCase):
@@ -81,6 +86,107 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(v('[{"seg": "[1.2]", "reason": "r"}]')[0]["seg"], "1.2")
         with self.assertRaises(ValueError):
             v('[{"seg": "1.2"}]')
+
+
+class IsolationTest(unittest.TestCase):
+    def test_devin_command_uses_isolation_config(self):
+        cmd = agents._command({"agent": "devin", "model": "m"}, Path("/t/p.md"), "x", Path("/t/c.json"))
+        self.assertEqual(cmd[cmd.index("--config") + 1], "/t/c.json")
+        self.assertEqual(cmd[-1], "-p")
+
+    def test_template_always_blocks(self):
+        text = agents.isolation_template()
+        self.assertIn("exit 2", text)
+        hook = json.loads(text)["hooks"]["PreToolUse"][0]
+        self.assertEqual(hook["matcher"], "")
+        self.assertTrue(hook["hooks"][0]["command"].rstrip("'").endswith("exit 2"))
+
+    def test_missing_hook_refuses_and_template_change_changes_cache_key(self):
+        role = {"agent": "devin", "model": "m"}
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.object(agents, "devin_version", return_value="1.0"):
+            tpl = Path(d) / "iso.json"
+            with mock.patch.object(agents, "ISOLATION", tpl):
+                tpl.write_text('{"hooks": {}}', "utf-8")
+                with self.assertRaises(RuntimeError):
+                    agents.cache_path(role, "p")
+                tpl.write_text('__HOOK_LOG__ exit 2', "utf-8")
+                first = agents.cache_path(role, "p")
+                tpl.write_text('__HOOK_LOG__ exit 2 ', "utf-8")
+                self.assertNotEqual(first, agents.cache_path(role, "p"))
+
+    def test_parse_hook_log_and_strip_banner(self):
+        log = '{"tool_name":"read"}{"tool_name":"exec"}\n{"tool_name":"webfetch"}\n'
+        self.assertEqual([c["tool_name"] for c in agents.parse_hook_log(log)], ["read", "exec", "webfetch"])
+        self.assertEqual(agents.strip_banner("\n ✓ Logged in as x\n ✓ ok\n[5.1] 译文\n"), "[5.1] 译文\n")
+
+
+class FakeBook:
+    lang, title = "希腊文", "测试书"
+
+    def __init__(self, root):
+        self.root = Path(root)
+
+    def source(self, ch):
+        return {f"{ch}.1": "λόγος", f"{ch}.2": "θεός"}
+
+    def work(self, ch):
+        d = self.root / f"ch{ch:02d}"
+        d.mkdir(parents=True, exist_ok=True)
+        return d
+
+    def glossary(self, locked_only=True):
+        return []
+
+    def glossary_text(self):
+        return "（暂无）"
+
+    def style_guide(self):
+        return "风格"
+
+    def scripture_text(self, ch):
+        return "（未标注）"
+
+
+def fake_call(cfg, role, prompt, validate, info):
+    ch = prompt.split("第 ")[1].split(" 章")[0]
+    info.update(label=f"devin / {role}", cache_hit=False, blocked_tool_calls=[])
+    return validate(f"[{ch}.1] 道\n[{ch}.2] 上帝\n=== NOTES ===\n[{ch}.1] 把握：高｜建议译注：否｜无")
+
+
+class TranslateTest(unittest.TestCase):
+    def test_only_skip_and_meta(self):
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(tw.agents, "call", side_effect=fake_call) as call:
+            book = FakeBook(d)
+            tw.translate({}, book, 3, only="a")
+            work = book.work(3)
+            self.assertTrue((work / "draft_a.txt").exists())
+            self.assertFalse((work / "draft_b.txt").exists())
+            meta = json.loads((work / "draft_a.meta.json").read_text("utf-8"))
+            self.assertEqual(meta["translator"], "translator_a")
+            for k in ("prompt_template", "prompt_rendered", "source", "style_guide", "glossary", "scripture"):
+                self.assertEqual(len(meta["sha256"][k]), 64)
+            tw.translate({}, book, 3, only="a")
+            self.assertEqual(call.call_count, 1)
+            tw.translate({}, book, 3, only="a", force=True)
+            self.assertEqual(call.call_count, 2)
+
+    def test_chapter_failure_does_not_stop_batch(self):
+        done = []
+
+        def flaky(cfg, book, ch, only, force):
+            if ch == 2:
+                raise RuntimeError("坏")
+            done.append(ch)
+
+        book = mock.Mock()
+        book.parse_chapters.return_value = [1, 2, 3]
+        args = mock.Mock(cmd="translate", book="x", ch="1-3", only="a", force=False)
+        with mock.patch.object(tw, "Book", return_value=book), mock.patch.object(tw, "translate", side_effect=flaky):
+            with self.assertRaises(SystemExit) as e:
+                tw.cmd_stage(args, {})
+        self.assertEqual(done, [1, 3])
+        self.assertIn("2", str(e.exception.code))
 
 
 if __name__ == "__main__":

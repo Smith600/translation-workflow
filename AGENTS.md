@@ -3,7 +3,9 @@
 - 本项目是基督教公版文献中译工作流；用户说明见 `README.md`（中文）。
 - 运行：`python3 scripts/tw.py <命令> <书名> ...`（书名在命令之后，如 `tw.py eval 1clement mqm --ch 5`）。只用 Python 标准库，不要引入依赖。
 - 测试：`python3 -m unittest discover -s tests`
-- 模型调用都经过 `scripts/agents.py`（`devin -p` / `pi -p`，在临时空目录中运行，结果缓存在 `.cache/`，缓存键不含 `NO_TOOLS` 后缀）。角色与模型在 `config/pipeline.toml`；评审不得与译者、裁决者、润色者同一模型家族。
+- 模型调用都经过 `scripts/agents.py`（`devin -p` / `pi -p`，在临时空目录中运行，结果缓存在 `.cache/`，缓存键不含 `NO_TOOLS` 后缀）。devin 调用一律带 `--config` 隔离配置（`config/devin_isolation.json`：PreToolUse hook 一律 `exit 2` 并记日志），缓存键含隔离配置摘要和 devin CLI 版本。改动隔离配置或升级 devin 后，先运行 `python3 scripts/verify_isolation.py`（默认免费的 swe-2-medium）。
+- 第一阶段（独立初译）的冻结输入见 `books/1clement/decisions.md`；初译开始后不要改 `prompts/translate.md`、风格指南、术语表和原文。`tw.py translate` 会跳过已有 `draft_x.txt` + `draft_x.meta.json` 的章节。
+- 角色与模型在 `config/pipeline.toml`；评审不得与译者、裁决者、润色者同一模型家族。
 - 段落文件格式：每行 `[章.节] 文本`（`scripts/segments.py`）。模型输出必须与原文段落编号完全一致。
 - 初译提示词不得包含英译或任何现有中译本；英译只用于裁决和审阅单。不得使用有版权的中译本或现代校勘本。
 - `books/<书>/final/` 可能含用户的手工修改，不要覆盖（`polish` 需 `--force` 才覆盖）。

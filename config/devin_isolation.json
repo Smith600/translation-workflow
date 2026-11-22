@@ -1,0 +1,29 @@
+{
+  "read_config_from": {
+    "agents_standard": false,
+    "cursor": false,
+    "windsurf": false,
+    "claude": false,
+    "copilot": false,
+    "codex": false,
+    "kiro": false,
+    "opencode": false,
+    "zed": false
+  },
+  "permissions": {
+    "deny": ["read", "edit", "grep", "glob", "exec", "mcp__*", "Fetch(domain:*)"]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -c 'cat >> \"__HOOK_LOG__\" 2>/dev/null; echo >> \"__HOOK_LOG__\" 2>/dev/null; exit 2'"
+          }
+        ]
+      }
+    ]
+  }
+}

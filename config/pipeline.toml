@@ -3,7 +3,9 @@
 # agent = "pi"    时：provider + model 为 `pi --list-models` 列出的名称
 #
 # 原则：评审不能与译者、裁决者、润色者同一家族（否则会偏袒自己）。
-# 当前分配：Anthropic 译者甲 / Kimi(SWE-2) 译者乙 / OpenAI 裁决 / DeepSeek 润色 / Google + Qwen 评审
+# 当前分配：Anthropic 译者甲 / SWE-2（Cognition，基于 Kimi K3 后训练）译者乙 / OpenAI 裁决 / DeepSeek 润色 / Google + Qwen 评审
+# 第一阶段（独立初译）：译者甲 devin / claude-opus-5-5-medium 已定；译者乙待定（档位建议同为 medium）。
+# devin 调用一律使用 config/devin_isolation.json 拦截全部工具（见 scripts/agents.py、scripts/verify_isolation.py）。
 
 [roles.translator_a]
 agent = "devin"
